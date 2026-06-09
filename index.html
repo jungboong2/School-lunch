@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자운고등학교 급식 정보 서비스</title>
+  <meta name="description" content="NEIS Open API를 기반으로 서울 자운고등학교의 실시간 급식 식단, 알레르기 정보, 영양 정보를 제공하는 프리미엄 서비스입니다.">
+  
+  <!-- Preconnect and Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- FontAwesome for Premium Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  
+  <!-- Main App Wrapper -->
+  <div class="app-container">
+    
+    <!-- Background Blur Decorative Elements -->
+    <div class="decor-circle decor-1"></div>
+    <div class="decor-circle decor-2"></div>
+    <div class="decor-circle decor-3"></div>
+
+    <!-- Header Section -->
+    <header class="app-header glass-panel">
+      <div class="header-left">
+        <div class="school-logo">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="school-details">
+          <h1 id="school-name">자운고등학교</h1>
+          <div class="school-badges">
+            <span id="school-location" class="badge"><i class="fa-solid fa-location-dot"></i> 서울특별시</span>
+            <span id="school-type" class="badge"><i class="fa-solid fa-school"></i> 고등학교</span>
+            <span id="school-coeducation" class="badge"><i class="fa-solid fa-venus-mars"></i> 남여공학</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="header-right">
+        <!-- Live Clock -->
+        <div class="live-clock-panel">
+          <span id="live-time"><i class="fa-regular fa-clock"></i> 00:00:00</span>
+        </div>
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="icon-btn glass-btn" aria-label="테마 전환" title="테마 전환">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <!-- Search Button -->
+        <button id="open-search-btn" class="primary-btn glass-btn" aria-label="학교 검색" title="학교 검색">
+          <i class="fa-solid fa-magnifying-glass"></i> 다른 학교 검색
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation & Date Controller -->
+    <section class="date-navigator-container glass-panel">
+      <div class="date-navigator">
+        <button id="prev-day-btn" class="nav-btn" aria-label="이전 날짜" title="이전 날짜">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        
+        <div class="date-display-wrapper">
+          <label for="date-input" class="date-picker-label">
+            <i class="fa-regular fa-calendar-days"></i>
+            <span id="date-text">2026년 06월 09일 (화)</span>
+          </label>
+          <input type="date" id="date-input" class="hidden-date-input">
+        </div>
+        
+        <button id="next-day-btn" class="nav-btn" aria-label="다음 날짜" title="다음 날짜">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+      
+      <div class="quick-nav-actions">
+        <button id="today-btn" class="action-btn text-btn"><i class="fa-solid fa-house"></i> 오늘</button>
+      </div>
+    </section>
+
+    <!-- Main Content Section -->
+    <main class="main-content">
+      <!-- Loading Shimmer State (Hidden by default) -->
+      <div id="loader" class="loader-container hidden">
+        <div class="spinner"></div>
+        <p>급식 정보를 불러오는 중입니다...</p>
+      </div>
+
+      <!-- Meal Cards Grid -->
+      <div id="meal-cards-grid" class="meal-grid">
+        <!-- Dynamic Cards Inserted Here by JS -->
+      </div>
+      
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state-panel glass-panel hidden">
+        <div class="empty-icon">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <h2>급식 정보가 없습니다</h2>
+        <p>선택하신 날짜에는 급식 식단이 등록되어 있지 않거나 휴업일(주말/공휴일)일 수 있습니다.</p>
+      </div>
+    </main>
+
+    <!-- Allergen Filter Panel -->
+    <aside class="allergen-panel glass-panel">
+      <div class="panel-header">
+        <h2><i class="fa-solid fa-circle-exclamation"></i> 알레르기 유발 성분 안내</h2>
+        <p>성분을 클릭하면 해당 알레르기가 포함된 식단 메뉴가 강조 표시됩니다.</p>
+      </div>
+      <div class="allergen-grid">
+        <!-- 19 Allergens -->
+        <button class="allergen-filter-btn" data-allergen="1"><span>1</span> 난류</button>
+        <button class="allergen-filter-btn" data-allergen="2"><span>2</span> 우유</button>
+        <button class="allergen-filter-btn" data-allergen="3"><span>3</span> 메밀</button>
+        <button class="allergen-filter-btn" data-allergen="4"><span>4</span> 땅콩</button>
+        <button class="allergen-filter-btn" data-allergen="5"><span>5</span> 대두</button>
+        <button class="allergen-filter-btn" data-allergen="6"><span>6</span> 밀</button>
+        <button class="allergen-filter-btn" data-allergen="7"><span>7</span> 고등어</button>
+        <button class="allergen-filter-btn" data-allergen="8"><span>8</span> 게</button>
+        <button class="allergen-filter-btn" data-allergen="9"><span>9</span> 새우</button>
+        <button class="allergen-filter-btn" data-allergen="10"><span>10</span> 돼지고기</button>
+        <button class="allergen-filter-btn" data-allergen="11"><span>11</span> 복숭아</button>
+        <button class="allergen-filter-btn" data-allergen="12"><span>12</span> 토마토</button>
+        <button class="allergen-filter-btn" data-allergen="13"><span>13</span> 아황산류</button>
+        <button class="allergen-filter-btn" data-allergen="14"><span>14</span> 호두</button>
+        <button class="allergen-filter-btn" data-allergen="15"><span>15</span> 닭고기</button>
+        <button class="allergen-filter-btn" data-allergen="16"><span>16</span> 쇠고기</button>
+        <button class="allergen-filter-btn" data-allergen="17"><span>17</span> 오징어</button>
+        <button class="allergen-filter-btn" data-allergen="18"><span>18</span> 조개류</button>
+        <button class="allergen-filter-btn" data-allergen="19"><span>19</span> 잣</button>
+      </div>
+      <div class="allergen-actions">
+        <button id="clear-allergen-btn" class="text-btn hidden"><i class="fa-solid fa-filter-circle-xmark"></i> 필터 해제</button>
+      </div>
+    </aside>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>본 급식 정보는 교육부 나이스(NEIS) 오픈 API를 통해 실시간으로 조작·제공됩니다.</p>
+      <p>© 2026 자운고등학교 급식 정보 서비스. Designed with <i class="fa-solid fa-heart"></i></p>
+    </footer>
+
+  </div>
+
+  <!-- School Search Modal (Overlay) -->
+  <div id="search-modal" class="modal-overlay hidden">
+    <div class="modal-content glass-panel animated-modal">
+      <div class="modal-header">
+        <h2><i class="fa-solid fa-magnifying-glass"></i> 학교 검색</h2>
+        <button id="close-search-btn" class="close-btn" aria-label="닫기"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="search-input-group">
+          <input type="text" id="search-school-input" placeholder="학교명을 입력하세요 (예: 자운고, 서울고)" autofocus>
+          <button id="search-submit-btn" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        
+        <div id="search-loading" class="search-status-spinner hidden">
+          <div class="mini-spinner"></div>
+          <p>학교 정보를 조회 중입니다...</p>
+        </div>
+        
+        <div id="search-no-results" class="search-status-message hidden">
+          <i class="fa-solid fa-circle-info"></i>
+          <p>검색 결과가 없습니다. 학교명을 다시 확인해 주세요.</p>
+        </div>
+
+        <ul id="search-results-list" class="search-results-list">
+          <!-- Search results list items here -->
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>

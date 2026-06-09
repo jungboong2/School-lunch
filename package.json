@@ -1,0 +1,16 @@
+{
+  "name": "neis-school-meal",
+  "version": "1.0.0",
+  "description": "NEIS Open API School Meal Information Service",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "axios": "^1.7.2"
+  },
+  "private": true
+}
